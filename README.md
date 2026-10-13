@@ -31,6 +31,8 @@ Each lab is self-contained and includes:
 - 🖼️ screenshots used as **evidence** of the work done,
 - ✅ a knowledge check, with its corrected version when available.
 
+The labs follow the **Cloud-Native Infrastructures** module: OpenStack's core services (identity, compute, images, networking, storage), then automated infrastructure provisioning with Infrastructure as Code. They all run on the same environment: OpenStack deployed with DevStack on an AWS EC2 instance with nested virtualization (Ubuntu), reached over SSH and through the Horizon dashboard.
+
 The goal is to move from fundamental infrastructure concepts to **practical cloud administration, automation and DevOps workflows**, and to document every step so that it can be understood and reproduced.
 
 
@@ -43,7 +45,9 @@ The goal is to move from fundamental infrastructure concepts to **practical clou
 | 01 | [`Lab1_OpenStack`](./Lab1_OpenStack) | OpenStack, EC2, EBS, networking, SSH | Reports, screenshots, knowledge check | ✅ Completed |
 | 02 | [`LAB02-OpenStack-Identity`](./LAB02-OpenStack-Identity) | OpenStack, Keystone, identity management, RBAC | Statement, report, knowledge check | ✅ Completed |
 | 03 | [`LAB03-OpenStack-Nova-Glance`](./LAB03-OpenStack-Nova-Glance) | OpenStack, Nova, Glance, flavors, cloud-init, instance lifecycle, snapshots, libvirt/KVM | Statement (EN/FR) | ✅ Completed |
-| 04 | _To be announced_ | — | — | 🔜 Planned |
+| 04 | Storage | OpenStack, Cinder (block storage), Swift (object storage) | — | 🔜 Planned |
+| 05 | Advanced networking | OpenStack, Neutron | — | 🔜 Planned |
+| 06 | Infrastructure as Code | OpenTofu | — | 🔜 Planned |
 
 > The table is updated each time a lab is completed.
 
@@ -195,7 +199,7 @@ New labs follow the same layout: one folder per lab with the statement, report, 
 | 🐧 **Linux** | SSH, network interface inspection, command-line administration, cloud-init, libvirt / KVM inspection |
 | 🌳 **Git / GitHub** | Structured repository, granular commits, documented history |
 
-**Next skills (not yet demonstrated here):** IAM, VPC, S3, Python/Boto3 automation, Terraform. See the [Roadmap](#-roadmap).
+**Next skills (not yet demonstrated here):** IAM, VPC, S3, Python/Boto3 automation, Cinder / Swift storage, Neutron networking, Infrastructure as Code (OpenTofu). See the [Roadmap](#-roadmap).
 
 
 ---
@@ -248,8 +252,9 @@ flowchart LR
 - [x] Lab 03: Compute & Images (Nova and Glance)
 - [x] AWS networking (VPC, subnets, routing)
 - [ ] IAM and security
-- [ ] Additional OpenStack labs
-- [ ] Infrastructure as Code (Terraform)
+- [ ] Lab 04: Storage (Cinder, Swift)
+- [ ] Lab 05: Advanced networking (Neutron)
+- [ ] Lab 06: Infrastructure as Code (OpenTofu)
 - [ ] CI/CD
 
 ---
