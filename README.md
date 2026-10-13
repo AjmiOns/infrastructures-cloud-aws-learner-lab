@@ -112,6 +112,7 @@ The goal is to move from fundamental infrastructure concepts to **practical clou
 
 </details>
 
+
 ---
 
 ## 🔑 Lab 02 — OpenStack Identity (Keystone)
