@@ -7,15 +7,15 @@
 ![Last commit](https://img.shields.io/github/last-commit/AjmiOns/infrastructures-cloud-aws-learner-lab?style=flat-square)
 ![Repo size](https://img.shields.io/github/repo-size/AjmiOns/infrastructures-cloud-aws-learner-lab?style=flat-square)
 ![License](https://img.shields.io/github/license/AjmiOns/infrastructures-cloud-aws-learner-lab?style=flat-square)
-![Labs](https://img.shields.io/badge/labs-2%20completed-success?style=flat-square)
+![Labs](https://img.shields.io/badge/labs-3%20completed-success?style=flat-square)
 ![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
 
-![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20EBS%20%7C%20<SERVICE_LAB02>-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
-![OpenStack](https://img.shields.io/badge/OpenStack-Horizon-ED1944?style=flat-square&logo=openstack&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20EBS-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
+![OpenStack](https://img.shields.io/badge/OpenStack-Horizon%20%7C%20Keystone%20%7C%20Nova%20%7C%20Glance-ED1944?style=flat-square&logo=openstack&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-administration-FCC624?style=flat-square&logo=linux&logoColor=black)
 ![Git](https://img.shields.io/badge/Git-GitHub-F05032?style=flat-square&logo=git&logoColor=white)
 
-[Overview](#-overview) · [Labs](#-labs) · [Lab 01](#-lab-01--openstack--amazon-ec2) · [Lab 02](#-lab-02--<titre-du-lab-02>) · [Structure](#-repository-structure) · [Skills](#-skills-demonstrated) · [Workflow](#-git-workflow) · [Roadmap](#-roadmap) · [Security](#-security-notes) · [Author](#-author)
+[Overview](#-overview) · [Labs](#-labs) · [Lab 01](#-lab-01--openstack--amazon-ec2) · [Lab 02](#-lab-02--openstack-identity-keystone) · [Lab 03](#-lab-03--compute--images-nova-and-glance) · [Structure](#-repository-structure) · [Skills](#-skills-demonstrated) · [Workflow](#-git-workflow) · [Roadmap](#-roadmap) · [Security](#-security-notes) · [Author](#-author)
 
 </div>
 
@@ -41,8 +41,9 @@ The goal is to move from fundamental infrastructure concepts to **practical clou
 | # | Lab | Main topics | Deliverables | Status |
 |---|-----|-------------|--------------|:------:|
 | 01 | [`Lab1_OpenStack`](./Lab1_OpenStack) | OpenStack, EC2, EBS, networking, SSH | Reports, screenshots, knowledge check | ✅ Completed |
-| 02 | [`LAB02-OpenStack-Identity`](LAB02-OpenStack-Identity) | OpenStack, Keystone, identity management | Statement, report, knowledge check | ✅ Completed | | ✅ Completed |
-| 03 | _To be announced_ | — | — | 🔜 Planned |
+| 02 | [`LAB02-OpenStack-Identity`](./LAB02-OpenStack-Identity) | OpenStack, Keystone, identity management, RBAC | Statement, report, knowledge check | ✅ Completed |
+| 03 | [`LAB03-OpenStack-Nova-Glance`](./LAB03-OpenStack-Nova-Glance) | OpenStack, Nova, Glance, flavors, cloud-init, instance lifecycle, snapshots, libvirt/KVM | Statement (EN/FR) | ✅ Completed |
+| 04 | _To be announced_ | — | — | 🔜 Planned |
 
 > The table is updated each time a lab is completed.
 
@@ -108,6 +109,7 @@ The goal is to move from fundamental infrastructure concepts to **practical clou
 </details>
 
 ---
+
 ## 🔑 Lab 02 — OpenStack Identity (Keystone)
 
 **Focus:** how a client authenticates against OpenStack, how it discovers services, and how Keystone and the other services isolate projects and enforce role-based access control (RBAC). Done on a DevStack environment.
@@ -120,6 +122,40 @@ The goal is to move from fundamental infrastructure concepts to **practical clou
 | **2. Projects, users and roles** | Domains, projects, users, groups and roles, creating projects and users with explicit role assignments, one profile per identity with `clouds.yaml`, groups and effective assignments |
 | **3. Isolation and access control** | Multi-tenancy between two teams, a member deploying infrastructure, a user from another project (404), a read-only user (403), what a member cannot do, the admin view with `--all-projects`, where access policies are defined |
 
+### Deliverables
+
+| Document | Description |
+|----------|-------------|
+| [`LAB02-OpenStack-Identity-enonce.pdf`](./LAB02-OpenStack-Identity/LAB02-OpenStack-Identity-enonce.pdf) | Lab statement |
+| [`Compte-Rendu-TP02-OpenStack-Identity.pdf`](./LAB02-OpenStack-Identity/Compte-Rendu-TP02-OpenStack-Identity.pdf) | Lab report (French) |
+| [`knowledge-check/`](./LAB02-OpenStack-Identity/knowledge-check) | Keystone knowledge check and corrected version |
+
+---
+
+## 💻 Lab 03 — Compute & Images: Nova and Glance
+
+**Focus:** how OpenStack stores and shares images (Glance), how instances are launched and customized (Nova, flavors, cloud-init), how their lifecycle is driven, and what Nova actually creates on the hypervisor (libvirt / KVM). Done on the same DevStack environment, running on an EC2 instance.
+
+### What was done
+
+| Part | Details |
+|------|---------|
+| **0. Environment check** | Checking DevStack services after an EC2 restart, restoring the `br-ex` external bridge (172.24.4.1/24) |
+| **1. Glance: image management** | Exploring the CirrOS image, importing an Ubuntu 24.04 cloud image (QCOW2), image properties and `--min-disk` / `--min-ram`, where Glance stores the file, visibility levels and sharing an image between projects (`shared`, member status `pending` / `accepted`) |
+| **2. Flavors** | Defining flavors adapted to a given need |
+| **3. Boot-time customization with cloud-init** | `user-data` with `#cloud-config` (`hostname`, `write_files`, `runcmd`), launching an instance with a key pair and security group, floating IP, reading the console log, testing the web service served by the VM |
+| **4. Instance lifecycle** | `stop` / `start`, `pause` / `unpause`, `suspend` / `resume`, `shelve` / `unshelve`, `reboot --soft` / `--hard`, `resize` with confirm and revert, action history; observing `status`, `vm_state`, `power_state` and `task_state` for each operation |
+| **5. Instance snapshots** | Creating a snapshot from a running instance and redeploying a new instance from it |
+| **6. Hypervisor side** | Locating the VM in libvirt (`virsh`), reading its XML definition and instance files, backing file and virtual / disk sizes, comparing a snapshot-based clone with the original |
+
+### Deliverables
+
+| Document | Description |
+|----------|-------------|
+| [`LAB03-OpenStack-Nova-Glance-enonce.pdf`](./LAB03-OpenStack-Nova-Glance/LAB03-OpenStack-Nova-Glance-enonce.pdf) | Lab statement (English) |
+| [`LAB03-OpenStack-Nova-Glance-enonce-fr.pdf`](./LAB03-OpenStack-Nova-Glance/LAB03-OpenStack-Nova-Glance-enonce-fr.pdf) | Lab statement (French) |
+
+---
 
 ## 🗂️ Repository Structure
 
@@ -138,11 +174,14 @@ infrastructures-cloud-aws-learner-lab/
 │   ├── Compte-Rendu-TP02-OpenStack-Identity.pdf
 │   ├── Compte-Rendu-TP02-OpenStack-Identity.docx
 │   └── knowledge-check/           # Keystone knowledge check + corrected version
+├── LAB03-OpenStack-Nova-Glance/
+│   ├── LAB03-OpenStack-Nova-Glance-enonce.pdf
+│   └── LAB03-OpenStack-Nova-Glance-enonce-fr.pdf
 ├── .gitignore
 └── README.md
 ```
 
-New labs follow the same layout: `LabN_<Topic>/` with the report, screenshots and knowledge check.
+New labs follow the same layout: one folder per lab with the statement, report, screenshots and knowledge check.
 
 ---
 
@@ -151,9 +190,9 @@ New labs follow the same layout: `LabN_<Topic>/` with the report, screenshots an
 | Domain | Skills |
 |--------|--------|
 | ☁️ **Cloud** | Compute, storage and networking fundamentals; cloud service models |
-| 🏢 **OpenStack** | Horizon, core services, instances, networks, routers, floating IPs, Open vSwitch |
+| 🏢 **OpenStack** | Horizon, core services, instances, networks, routers, floating IPs, Open vSwitch, Keystone (projects, users, roles, RBAC), Glance (images, sharing), Nova (flavors, lifecycle, snapshots) |
 | 🟧 **AWS** | EC2, EBS, key pairs, security groups, IP addressing |
-| 🐧 **Linux** | SSH, network interface inspection, command-line administration |
+| 🐧 **Linux** | SSH, network interface inspection, command-line administration, cloud-init, libvirt / KVM inspection |
 | 🌳 **Git / GitHub** | Structured repository, granular commits, documented history |
 
 **Next skills (not yet demonstrated here):** IAM, VPC, S3, Python/Boto3 automation, Terraform. See the [Roadmap](#-roadmap).
@@ -170,6 +209,7 @@ docs: add Horizon login screenshot
 docs: add network topology screenshot
 docs: add EC2 instance screenshot
 docs: add corrected knowledge check
+docs: add lab 03 statement (Nova and Glance)
 ```
 
 Typical flow for new lab work:
@@ -204,6 +244,8 @@ flowchart LR
 ```
 
 - [x] Lab 01: OpenStack & Amazon EC2
+- [x] Lab 02: OpenStack Identity (Keystone)
+- [x] Lab 03: Compute & Images (Nova and Glance)
 - [x] AWS networking (VPC, subnets, routing)
 - [ ] IAM and security
 - [ ] Additional OpenStack labs
